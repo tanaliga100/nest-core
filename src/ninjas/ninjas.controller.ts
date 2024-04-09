@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Put, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, ParseIntPipe, Post, Put, Query, ValidationPipe } from '@nestjs/common';
 import { CreateNinjaDto } from './dto/create-ninja.dto';
 import { UpdateNinjaDto } from './dto/update-ninja.dto';
 import { NinjasService } from './ninjas.service';
@@ -30,14 +30,13 @@ export class NinjasController {
       //     name: "jordan"
       //   }
       // ]
-    
-  }
+    }
   }
   // GET /ninjas/:id -- {...}
   @Get(':id')
-  getOneNinja(@Param('id') id: string) {
+  getOneNinja(@Param('id', ParseIntPipe) id: number) {
     try {
-      return  this.ninjasService.getNinja(Number(id))
+      return  this.ninjasService.getNinja(id)
     } catch (error) {
       throw new HttpException({
         status: HttpStatus.NOT_FOUND,
@@ -48,10 +47,9 @@ export class NinjasController {
     }
   }
 
-  
   // POST /ninjas
   @Post()
-  createNinja(@Body() createNinjaDTO: CreateNinjaDto) {
+  createNinja(@Body(new ValidationPipe()) createNinjaDTO: CreateNinjaDto) {
     return {
       msg: "Ninja Created",
       data: this.ninjasService.createNinja(createNinjaDTO)

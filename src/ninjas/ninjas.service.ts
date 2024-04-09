@@ -28,7 +28,6 @@ export class NinjasService {
       return ninja;
   }
 
-
   createNinja(createNinjaDTO: CreateNinjaDto) {
     const newNinja = {
       ...createNinjaDTO,
