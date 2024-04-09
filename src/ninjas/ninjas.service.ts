@@ -22,15 +22,13 @@ export class NinjasService {
   getNinja(id: number) {
     const ninja = this.ninjas.find((n: { id: number, name: string, weapon: string }) => n.id === id)
 
-    try {
       if (!ninja) {
           throw new Error(`Ninja with id: ${id} doesn't exist`)
         }
       return ninja;
-    } catch (error) {
-      return error.message
-    }   
   }
+
+
   createNinja(createNinjaDTO: CreateNinjaDto) {
     const newNinja = {
       ...createNinjaDTO,

@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Put, Query } from '@nestjs/common';
 import { CreateNinjaDto } from './dto/create-ninja.dto';
 import { UpdateNinjaDto } from './dto/update-ninja.dto';
 import { NinjasService } from './ninjas.service';
@@ -35,12 +35,20 @@ export class NinjasController {
   }
   // GET /ninjas/:id -- {...}
   @Get(':id')
-  getOneNinja(@Param('id') id:string) {
-    return {
-      msg: `One Ninja with id : ${id}`,
-      data: this.ninjasService.getNinja(Number(id))
+  getOneNinja(@Param('id') id: string) {
+    try {
+      return  this.ninjasService.getNinja(Number(id))
+    } catch (error) {
+      throw new HttpException({
+        status: HttpStatus.NOT_FOUND,
+        error: `Ninja with id : ${id}  doesn't exist`,
+      }, HttpStatus.NOT_FOUND, {
+        cause: error
+      })
     }
   }
+
+  
   // POST /ninjas
   @Post()
   createNinja(@Body() createNinjaDTO: CreateNinjaDto) {
@@ -61,10 +69,8 @@ export class NinjasController {
   }
 // DELETE /ninjas/:id -- {...}
  @Delete(':id')
-  deleteNinja(@Param('id') id: string) {
-    return {
-      msg: "Ninja Deleted",
-      data: this.ninjasService.removeNinja(+id)
-    }
+ deleteNinja(@Param('id') id: string) {
+   return this.ninjasService.removeNinja(+id)
+     
   }
 }
