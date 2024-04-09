@@ -13,6 +13,7 @@ export class NinjasController {
   getNinjas(@Query('weapon') weapon: 'stars' | 'waters' ) {
     return {
       msg: "All Ninjas",
+      length: this.ninjasService.getNinjas.length,
       query: `Query Parameters is : ${weapon}`,
       data: this.ninjasService.getNinjas(weapon)
       // data: [
@@ -37,21 +38,15 @@ export class NinjasController {
   getOneNinja(@Param('id') id:string) {
     return {
       msg: `One Ninja with id : ${id}`,
-      data: [
-        {
-          id: 123,
-          name: "jordan"
-        }
-      ]
+      data: this.ninjasService.getNinja(Number(id))
     }
   }
   // POST /ninjas
   @Post()
   createNinja(@Body() createNinjaDTO: CreateNinjaDto) {
     return {
-      name: createNinjaDTO.name,
-      pos: createNinjaDTO.pos,
-      data: []
+      msg: "Ninja Created",
+      data: this.ninjasService.createNinja(createNinjaDTO)
     }
   }
   // PUT /ninjas/:id -- {...}
@@ -60,17 +55,16 @@ export class NinjasController {
   updateNinja(@Param('id') id: string, @Body() updateNinjaDTO: UpdateNinjaDto) {
     return {
       msg: "Ninja Updated",
-      name: updateNinjaDTO.name,
-      pos: updateNinjaDTO.pos,
-      data: []
+     
+      data: this.ninjasService.updateNinja(+id, updateNinjaDTO)
     }
   }
 // DELETE /ninjas/:id -- {...}
  @Delete(':id')
-  deleteNinja() {
+  deleteNinja(@Param('id') id: string) {
     return {
       msg: "Ninja Deleted",
-      data: []
+      data: this.ninjasService.removeNinja(+id)
     }
   }
 }

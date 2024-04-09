@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
 export class CreateNinjaDto {
   name: string;
-  pos: string;
+  weapon: "stars" | "waters"
 }
